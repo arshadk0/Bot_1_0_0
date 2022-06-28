@@ -1,14 +1,12 @@
 const database = require('./database');
 const { default: axios } = require("axios");
 const api = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
-var Price;
-function get_data(entry){
+function get_data(){
     try{
         axios.get(api).then(response=>{
             const {symbol, price} = response.data;
             console.log(`Currency is "${symbol}" and price is ${price}`);
-            database.insert_data(price, entry);
-            //Price = price
+            database.insert_data(price);
         })
     }
     catch(e){
@@ -19,4 +17,3 @@ function get_data(entry){
 
 module.exports = { get_data }
 
-//module.exports = { price }

@@ -1,14 +1,15 @@
 const { Pool, Client } = require("pg");
-
-function create_database(pool){
-    pool.query("SELECT * from test", (err, res) => {
-        console.log(err, res);
-        pool.end();
+var pool;
+function create_database(){
+    pool.query("CREATE TABLE IF NOT EXISTS test(price VARCHAR(15))", (err, res) => {
+        //console.log(err, res);
+        console.log("DataBase created!")
+        //pool.end();
     });
 }
 
 function connect_database(){
-    const pool = new Pool({
+    pool = new Pool({
         user: 'team1',
         host: 'practisedb-fresher.cdsamxevdhkl.ap-south-1.rds.amazonaws.com',
         database: 'projects_db',
@@ -18,23 +19,27 @@ function connect_database(){
     pool.connect(function(err) {
         if (err) throw err;
         console.log("Database Connected!");
-        create_database(pool);
+        
     });
     
 }
 
-connect_database();
+//connect_database();
 
-function insert_data(price, entry){
-    const today = new Date();
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    pool.query("INSERT INTO test(id, time, price)VALUES(entry, time, price)",
+function insert_data(price){
+    pool.query("INSERT INTO test(price)VALUES("+price+")",
         (err, res) => {
-          console.log(err, res);
-          pool.end();
+          //console.log(err, res);
+          console.log(`Inserted with price = ${price}`)
+          //pool.end();
         }
     );      
 }
 
+function get_data(){
+    
 
-module.exports = { insert_data, connect_database, create_database }
+}
+
+
+module.exports = { insert_data, connect_database, create_database, get_data }
